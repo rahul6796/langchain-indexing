@@ -48,15 +48,15 @@ vectorstore = Chroma.from_documents(documents = splits, embedding = emb)
 # Retriveral:
 
 reteriver  = vectorstore.as_retriever(search_kwargs = {'k':1})
-docs = reteriver.get_relevant_documents('What is Task Decompostion ?')
+# docs = reteriver.get_relevant_documents('what is task Decompostion ?')
 
 
-# Generations
+# Generation
 
 template = """Answer the question based only on the following 
-context: {context}
 
-Question: {question}
+context: {context}
+question: {question}
 
 """
 
@@ -67,7 +67,19 @@ prompt= ChatPromptTemplate.from_template(template)
 llm = Ollama(model = 'gemma:2b')
 
 # chain = 
-chain = prompt | llm
+# chain = prompt | llm
 
-response = chain.invoke({'context':docs, 'question':"What is Task Decompostion ?"})
+# response = chain.invoke({'Context': docs, 'Question': "what is task Decompostion ?"})
+# print(response)
+
+
+# Automate create a RAG chain which we provide all the param like prompt and model and output 
+
+rag_chain = (
+    {'context': reteriver, 'question': RunnablePassthrough()}
+    | prompt
+    | llm
+    | StrOutputParser
+)
+response  = rag_chain.invoke("What is Task Decompostion ?")
 print(response)

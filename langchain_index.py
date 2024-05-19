@@ -40,5 +40,11 @@ splits = text_splitter.split_documents(docs)
 emb = OllamaEmbeddings(model = 'gemma:2b')
 vectorstore = Chroma.from_documents(documents = splits, embedding = emb)
 
-reteriver = vectorstore.as_retriever()
-print('Done')
+# reteriver = vectorstore.as_retriever()
+
+
+# Retriveral:
+
+reteriver  = vectorstore.as_retriever(search_kwargs = {'k':1})
+docs = reteriver.get_relevant_documents('what is task Decompostion ?')
+

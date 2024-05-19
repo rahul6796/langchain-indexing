@@ -41,4 +41,4 @@ emb = OllamaEmbeddings(model = 'gemma:2b')
 vectorstore = Chroma.from_documents(documents = splits, embedding = emb)
 
 reteriver = vectorstore.as_retriever()
-# print('Done')
+print('Done')
